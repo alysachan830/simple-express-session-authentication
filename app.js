@@ -24,7 +24,7 @@ const users = [
 app.use(
   session({
     store: new RedisStore({ client: redisClient }),
-    secret: process.env.SECRET, // environment variable
+    secret: process.env.SECRET,
     resave: false,
     saveUninitialized: false,
   })
