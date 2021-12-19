@@ -96,6 +96,7 @@ app.post('/logout', (req, res) => {
       return res.redirect('/profile')
     }
   })
+  // Default name of cookie set by express-session
   res.clearCookie('connect.sid')
   res.redirect('/')
 })
