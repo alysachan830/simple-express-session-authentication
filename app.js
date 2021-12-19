@@ -45,7 +45,7 @@ app.get('/', (req, res, next) => {
     return res.redirect('/profile')
   }
   const showInputError = req.session.showInputError || false
-  // The user hasn't logged in, it's unnecessary to store his data
+  // The user hasn't logged in, so it's unnecessary to store his data
   req.session.destroy((err) => {
     if (err) {
       return res.redirect('/')
