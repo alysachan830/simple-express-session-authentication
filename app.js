@@ -48,7 +48,7 @@ app.get('/', (req, res, next) => {
 // Middleware of parsing URL-encoded form data, for getting username and password
 app.use(express.urlencoded({ extended: true }))
 
-app.post('/login', (req, res) => {
+app.post('/', (req, res) => {
   const { username, password } = req.body
 
   // Prevent empty input
