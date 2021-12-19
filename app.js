@@ -30,16 +30,6 @@ app.use(
   })
 )
 
-// Middleware function
-const isLogin = (req, res, next) => {
-  if (req.session.isAuth) {
-    req.session.timestamps.push(new Date().getTime())
-    next()
-  } else {
-    res.redirect('/')
-  }
-}
-
 app.get('/', (req, res, next) => {
   if (req.session.isAuth) {
     return res.redirect('/profile')
@@ -85,7 +75,17 @@ app.post('/login', (req, res) => {
   res.redirect('/profile')
 })
 
-app.get('/profile', isLogin, (req, res) => {
+// Middleware function
+const checkIsAuthAndAddTimestamp = (req, res, next) => {
+  if (req.session.isAuth) {
+    req.session.timestamps.push(new Date().getTime())
+    next()
+  } else {
+    res.redirect('/')
+  }
+}
+
+app.get('/profile', checkIsAuthAndAddTimestamp, (req, res) => {
   const { username, timestamps } = req.session
   res.render('profile', { username, timestamps })
 })
