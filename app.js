@@ -30,7 +30,7 @@ app.use(
   })
 )
 
-app.get('/', (req, res, next) => {
+app.get('/', (req, res) => {
   if (req.session.isAuth) {
     return res.redirect('/profile')
   }
