@@ -1,5 +1,6 @@
 require('dotenv').config()
 const express = require('express')
+const flash = require('connect-flash')
 const app = express()
 const port = 3000
 app.set('view engine', 'ejs')
@@ -30,18 +31,13 @@ app.use(
   })
 )
 
+app.use(flash())
+
 app.get('/', (req, res) => {
   if (req.session.isAuth) {
     return res.redirect('/profile')
   }
-  const showInputError = req.session.showInputError || false
-  // The user hasn't logged in, so it's unnecessary to store his data
-  req.session.destroy((err) => {
-    if (err) {
-      return res.redirect('/')
-    }
-  })
-  res.clearCookie('connect.sid')
+  const showInputError = req.flash('showInputError')[0] || false
   res.render('index', { showInputError })
 })
 
@@ -53,7 +49,7 @@ app.post('/', (req, res) => {
 
   // Prevent empty input
   if (username.trim() === '' || password.trim() === '') {
-    req.session.showInputError = true
+    req.flash('showInputError', true)
     return res.redirect('/')
   }
 
@@ -64,11 +60,10 @@ app.post('/', (req, res) => {
 
   // Wrong username or password
   if (!targetUser) {
-    req.session.showInputError = true
+    req.flash('showInputError', true)
     return res.redirect('/')
   }
 
-  req.session.showInputError = false
   req.session.isAuth = true
   req.session.username = targetUser.username
   req.session.timestamps = []
